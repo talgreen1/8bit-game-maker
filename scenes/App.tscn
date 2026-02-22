@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/App.gd" id="1_3g6j8"]
+
+[node name="App" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3g6j8")
+
+[node name="InternalViewportContainer" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="InternalViewport" type="SubViewport" parent="InternalViewportContainer"]
+size = Vector2i(320, 180)
+render_target_update_mode = 4
+
+[node name="WorldRoot" type="Node2D" parent="InternalViewportContainer/InternalViewport"]
+
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="."]
