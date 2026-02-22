@@ -2,6 +2,7 @@ extends Control
 
 const SAMPLE_PROJECT_PATH := "res://sample_project/project.json"
 
+@onready var _viewport_container: SubViewportContainer = $InternalViewportContainer
 @onready var _viewport: SubViewport = $InternalViewportContainer/InternalViewport
 @onready var _world_root: Node2D = $InternalViewportContainer/InternalViewport/WorldRoot
 @onready var _audio_player: AudioStreamPlayer = $AudioPlayer
@@ -52,6 +53,7 @@ func load_project(project_path: String) -> bool:
     _timeline_controller.set_timeline(_project_model.timeline)
     _viewport.size = _project_model.internal_resolution
     _scene_runtime.set_internal_resolution(_project_model.internal_resolution)
+    _apply_output_resolution(_project_model.output_resolution)
 
     if _project_model.audio_path != "":
         var audio_resolved := _project_model.resolve_asset_path(_project_model.audio_path)
@@ -80,3 +82,11 @@ func _load_active_scene(scene_id: String) -> void:
 
     _scene_runtime.load_scene_model(model)
     _active_scene_id = scene_id
+
+
+func _apply_output_resolution(size: Vector2i) -> void:
+    if size.x <= 0 or size.y <= 0:
+        return
+    _viewport_container.size = Vector2(size)
+    _viewport_container.custom_minimum_size = Vector2(size)
+    DisplayServer.window_set_size(size)
