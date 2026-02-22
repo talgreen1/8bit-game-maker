@@ -1,17 +1,20 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-This repository currently contains planning documents and no source code yet.
+This repository contains planning docs plus an initial Godot 4 milestone scaffold.
+- `project.godot`: Godot project config
+- `scenes/`: app scene(s), currently `App.tscn`
+- `scripts/models/`: JSON models (`ProjectModel`, `SceneModel`)
+- `scripts/runtime/`: runtime systems (`PlaybackClock`, `TimelineController`, `SceneRuntime`)
+- `sample_project/`: minimal project + scene JSON used for validation
 - `8_bit_music_clip_maker_godot_app_plan.md`: product and architecture plan
 - `EXECUTION_PLAN.md`: milestone breakdown
-- `README.md`: short project overview
-
-When implementation starts, expect a standard Godot layout (e.g., `res://scenes/`, `res://scripts/`, `res://assets/`). Please keep new files under a clear top-level folder and update this section when the structure changes.
 
 ## Build, Test, and Development Commands
-No build/test automation is defined yet.
-- Run the project from the Godot editor once the Godot project is created.
-- If you add CLI tooling (e.g., `godot --headless`, export scripts, or formatters), document exact commands here with examples.
+No test automation is defined yet.
+- Run from editor: open folder in Godot 4.x and run `res://scenes/App.tscn`.
+- Optional CLI run (if Godot CLI is installed): `godot4 --path .`
+- Optional headless smoke check: `godot4 --headless --path . --quit`
 
 ## Coding Style & Naming Conventions
 Target runtime is Godot 4.x with GDScript.
