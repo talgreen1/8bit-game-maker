@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://kpuebpfvjx8p"]
 
-[ext_resource type="Script" path="res://scripts/App.gd" id="1_3g6j8"]
+[ext_resource type="Script" uid="uid://7jks0rmne4x6" path="res://scripts/App.gd" id="1_3g6j8"]
 
-[node name="App" type="Control"]
+[node name="App" type="Control" unique_id=980382618]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3g6j8")
 
-[node name="InternalViewportContainer" type="SubViewportContainer" parent="."]
+[node name="InternalViewportContainer" type="SubViewportContainer" parent="." unique_id=1231035864]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,10 +20,12 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 
-[node name="InternalViewport" type="SubViewport" parent="InternalViewportContainer"]
-size = Vector2i(320, 180)
+[node name="InternalViewport" type="SubViewport" parent="InternalViewportContainer" unique_id=642603260]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="WorldRoot" type="Node2D" parent="InternalViewportContainer/InternalViewport"]
+[node name="WorldRoot" type="Node2D" parent="InternalViewportContainer/InternalViewport" unique_id=1962165849]
+position = Vector2(315, 340)
 
-[node name="AudioPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="." unique_id=1988534365]

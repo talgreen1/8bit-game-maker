@@ -14,7 +14,7 @@ func set_timeline(entries: Array) -> void:
 
 
 func get_active_entry(t: float) -> Dictionary:
-    for entry in _entries:
+    for entry: Dictionary in _entries:
         var start := float(entry.get("start", 0.0))
         var duration := max(0.0, float(entry.get("duration", 0.0)))
         if t >= start and t < start + duration:
