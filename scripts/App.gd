@@ -10,6 +10,7 @@ const PROJECT_PANEL_SCRIPT := preload("res://scripts/ui/ProjectPanel.gd")
 const TIMELINE_PANEL_SCRIPT := preload("res://scripts/ui/TimelinePanel.gd")
 const SCENE_EDITOR_PANEL_SCRIPT := preload("res://scripts/ui/SceneEditorPanel.gd")
 const INSPECTOR_PANEL_SCRIPT := preload("res://scripts/ui/InspectorPanel.gd")
+const RIGHT_PANEL_WIDTH := 380
 
 @onready var _viewport_container: SubViewportContainer = $InternalViewportContainer
 @onready var _viewport: SubViewport = $InternalViewportContainer/InternalViewport
@@ -30,6 +31,7 @@ var _timeline_panel: PanelContainer
 var _scene_editor_panel: PanelContainer
 var _inspector_panel: PanelContainer
 var _time_label: Label
+var _right_scroll: ScrollContainer
 
 
 func _ready() -> void:
@@ -81,7 +83,7 @@ func load_project(project_path: String) -> bool:
 	_timeline_controller.set_timeline(_project_model.timeline)
 	_viewport.size = _project_model.internal_resolution
 	_scene_runtime.set_internal_resolution(_project_model.internal_resolution)
-	_apply_output_resolution(_project_model.output_resolution)
+	_apply_editor_preview_size(_project_model.internal_resolution)
 
 	if _project_model.audio_path != "":
 		var audio_resolved: String = _project_model.resolve_asset_path(_project_model.audio_path)
@@ -104,19 +106,18 @@ func load_project(project_path: String) -> bool:
 
 
 func _build_editor_layout() -> void:
-	var split: HSplitContainer = HSplitContainer.new()
-	split.layout_mode = 1
-	split.anchors_preset = Control.PRESET_FULL_RECT
-	split.anchor_right = 1.0
-	split.anchor_bottom = 1.0
-	split.split_offset = 980
-	add_child(split)
-	move_child(split, 0)
+	var layout_root: HBoxContainer = HBoxContainer.new()
+	layout_root.layout_mode = 1
+	layout_root.anchors_preset = Control.PRESET_FULL_RECT
+	layout_root.anchor_right = 1.0
+	layout_root.anchor_bottom = 1.0
+	add_child(layout_root)
+	move_child(layout_root, 0)
 
 	var left: VBoxContainer = VBoxContainer.new()
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	left.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	split.add_child(left)
+	layout_root.add_child(left)
 
 	_viewport_container.reparent(left)
 	_viewport_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -140,16 +141,17 @@ func _build_editor_layout() -> void:
 	_time_label.text = "Playback: 0.00s"
 	playback_row.add_child(_time_label)
 
-	var right_scroll: ScrollContainer = ScrollContainer.new()
-	right_scroll.custom_minimum_size = Vector2(380, 0)
-	right_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	split.add_child(right_scroll)
+	_right_scroll = ScrollContainer.new()
+	_right_scroll.custom_minimum_size = Vector2(RIGHT_PANEL_WIDTH, 0)
+	_right_scroll.size_flags_horizontal = Control.SIZE_SHRINK_END
+	_right_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout_root.add_child(_right_scroll)
 
 	var right: VBoxContainer = VBoxContainer.new()
 	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	right.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	right.add_theme_constant_override("separation", 10)
-	right_scroll.add_child(right)
+	_right_scroll.add_child(right)
 
 	_project_panel = PROJECT_PANEL_SCRIPT.new()
 	_project_panel.open_requested.connect(_on_project_open_requested)
@@ -372,11 +374,13 @@ func _set_project_status(message: String) -> void:
 		_project_panel.set_status(message)
 
 
-func _apply_output_resolution(size: Vector2i) -> void:
-	if size.x <= 0 or size.y <= 0:
+func _apply_editor_preview_size(internal_size: Vector2i) -> void:
+	if internal_size.x <= 0 or internal_size.y <= 0:
 		return
-	_viewport_container.custom_minimum_size = Vector2(size)
-	DisplayServer.window_set_size(size)
+	# Keep editor UI readable by avoiding a huge forced minimum (e.g. 1920x1080).
+	var scaled_width: float = float(internal_size.x) * 2.0
+	var scaled_height: float = float(internal_size.y) * 2.0
+	_viewport_container.custom_minimum_size = Vector2(scaled_width, scaled_height)
 
 
 func _array_to_vec2(value: Variant, fallback: Vector2) -> Vector2:
