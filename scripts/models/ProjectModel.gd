@@ -18,13 +18,13 @@ func load(path: String) -> bool:
 		last_error = "Unable to open file at %s" % path
 		return false
 
-	var parsed := JSON.parse_string(file.get_as_text())
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
 	if typeof(parsed) != TYPE_DICTIONARY:
 		last_error = "Invalid JSON format in project file."
 		return false
 
-	var data := parsed as Dictionary
-	var validation_error := validate_dict(data)
+	var data: Dictionary = parsed
+	var validation_error: String = validate_dict(data)
 	if validation_error != "":
 		last_error = validation_error
 		return false
@@ -64,7 +64,7 @@ func save(path: String) -> bool:
 
 
 func validate_dict(data: Dictionary) -> String:
-	var required := ["project_name", "fps", "internal_resolution", "output_resolution", "timeline"]
+	var required: Array = ["project_name", "fps", "internal_resolution", "output_resolution", "timeline"]
 	for key in required:
 		if not data.has(key):
 			return "Missing required field '%s' in project file." % key
@@ -72,12 +72,14 @@ func validate_dict(data: Dictionary) -> String:
 	if typeof(data["timeline"]) != TYPE_ARRAY:
 		return "Field 'timeline' must be an array."
 
-	for i in data["timeline"].size():
-		var entry := data["timeline"][i]
+	var timeline_entries: Array = data["timeline"]
+	for i in range(timeline_entries.size()):
+		var entry: Variant = timeline_entries[i]
 		if typeof(entry) != TYPE_DICTIONARY:
 			return "Timeline entry %d must be an object." % i
+		var entry_dict: Dictionary = entry
 		for required_key in ["scene_id", "start", "duration"]:
-			if not entry.has(required_key):
+			if not entry_dict.has(required_key):
 				return "Timeline entry %d missing '%s'." % [i, required_key]
 
 	return ""

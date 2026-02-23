@@ -15,6 +15,7 @@ No test automation is defined yet.
 - Run from editor: open folder in Godot 4.x and run `res://scenes/App.tscn`.
 - Optional CLI run (if Godot CLI is installed): `godot4 --path .`
 - Optional headless smoke check: `godot4 --headless --path . --quit`
+- Repository smoke check script (PowerShell): `.\tools\smoke_test.ps1 -GodotExe "C:\temp\godot-4.6.1\Godot_v4.6.1-stable_win64_console.exe"`
 
 ## Coding Style & Naming Conventions
 Target runtime is Godot 4.x with GDScript.
