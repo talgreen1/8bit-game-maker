@@ -52,7 +52,7 @@ func _ready() -> void:
 	_playback_clock.play()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if _timeline_controller == null:
 		return
 
@@ -63,6 +63,7 @@ func _process(_delta: float) -> void:
 
 	var local_t: float = _timeline_controller.get_scene_local_time(t)
 	_scene_runtime.update_time(local_t)
+	_scene_runtime.process_player_input(delta)
 
 	if _timeline_panel != null:
 		_timeline_panel.set_current_time(t)

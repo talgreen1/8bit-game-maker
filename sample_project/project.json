@@ -2,12 +2,12 @@
   "project_name": "Milestone 1 Demo",
   "fps": 60,
   "internal_resolution": [
-    320,
-    180
+    640,
+    480
   ],
   "output_resolution": [
-    1920,
-    1080
+    1600,
+    1200
   ],
   "audio_path": "",
   "timeline": [

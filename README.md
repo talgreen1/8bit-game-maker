@@ -18,6 +18,10 @@ The app loads `res://sample_project/project.json` and provides:
   - `SceneEditorPanel`: edit actor position
   - `InspectorPanel`: edit background color, actor velocity, and camera mode
 
+Sample project defaults:
+- Internal resolution: `640x480` (4:3), output/window: `1600x1200` (4:3)
+- Scene 1 (`Forest Walk`) includes a controllable character (`ui_left/right/up/down`)
+
 ## Current structure
 - `project.godot`: Godot project config and render settings
 - `scenes/`: main scene(s)

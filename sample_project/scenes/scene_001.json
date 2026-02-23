@@ -1,33 +1,57 @@
 {
-  "scene_name": "Runner Demo",
+  "scene_name": "Forest Walk",
   "background": {
-    "type": "static_color",
-    "color": "#243b55"
+    "type": "parallax",
+    "layers": [
+      {
+        "color": "#8ecf6b",
+        "alpha": 1.0
+      },
+      {
+        "color": "#6dab53",
+        "alpha": 0.9
+      },
+      {
+        "color": "#447a3f",
+        "alpha": 0.9
+      },
+      {
+        "color": "#2c5231",
+        "alpha": 1.0
+      }
+    ]
   },
   "actors": [
     {
-      "id": "runner",
+      "id": "forest_hero",
       "start_pos": [
-        36,
-        138
+        280,
+        340
       ],
       "velocity": [
-        20,
+        0,
         0
       ],
       "sprite_size": [
-        16,
-        24
+        20,
+        28
       ],
       "animation": {
         "name": "run",
-        "fps": 8,
+        "fps": 10,
         "colors": [
-          "#f0c13a",
-          "#ec9f19",
-          "#f6da7c"
+          "#f7e7a1",
+          "#a8db5a",
+          "#3d7f3a"
         ]
+      },
+      "control": {
+        "enabled": true,
+        "speed": 120
       }
     }
-  ]
+  ],
+  "camera": {
+    "mode": "follow"
+  }
 }

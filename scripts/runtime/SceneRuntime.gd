@@ -7,7 +7,11 @@ var _actor_root: Node2D
 var _actor_sprite: AnimatedSprite2D
 var _actor_start: Vector2 = Vector2.ZERO
 var _actor_velocity: Vector2 = Vector2.ZERO
+var _actor_position: Vector2 = Vector2.ZERO
+var _actor_size: Vector2i = Vector2i(16, 24)
 var _background_fill: Polygon2D
+var _player_control_enabled: bool = false
+var _player_move_speed: float = 80.0
 
 
 func _ready() -> void:
@@ -36,6 +40,10 @@ func load_scene_model(model: SceneModel) -> void:
 	_clear_children(_actor_root)
 	_actor_start = Vector2.ZERO
 	_actor_velocity = Vector2.ZERO
+	_actor_position = Vector2.ZERO
+	_actor_size = Vector2i(16, 24)
+	_player_control_enabled = false
+	_player_move_speed = 80.0
 
 	_build_background(model, model.background)
 	_build_actor(model.actors[0] if not model.actors.is_empty() else {})
@@ -44,7 +52,25 @@ func load_scene_model(model: SceneModel) -> void:
 func update_time(local_time: float) -> void:
 	if _actor_root == null:
 		return
-	_actor_root.position = _actor_start + (_actor_velocity * local_time)
+	if _player_control_enabled:
+		_actor_root.position = _actor_position
+		return
+	_actor_position = _actor_start + (_actor_velocity * local_time)
+	_actor_root.position = _actor_position
+
+
+func process_player_input(delta: float) -> void:
+	if not _player_control_enabled or _actor_root == null:
+		return
+	var input_dir := Vector2(
+		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	)
+	if input_dir.length_squared() > 1.0:
+		input_dir = input_dir.normalized()
+	_actor_position += input_dir * _player_move_speed * delta
+	_clamp_actor_position()
+	_actor_root.position = _actor_position
 
 
 func _build_background(model: SceneModel, data: Dictionary) -> void:
@@ -97,7 +123,8 @@ func _build_parallax_background(model: SceneModel, data: Dictionary) -> void:
 func _build_actor(data: Dictionary) -> void:
 	_actor_start = _array_to_vec2(data.get("start_pos", [32, 140]), Vector2(32, 140))
 	_actor_velocity = _array_to_vec2(data.get("velocity", [24, 0]), Vector2(24, 0))
-	_actor_root.position = _actor_start
+	_actor_position = _actor_start
+	_actor_root.position = _actor_position
 
 	_actor_sprite = AnimatedSprite2D.new()
 	_actor_sprite.centered = false
@@ -114,6 +141,7 @@ func _build_actor(data: Dictionary) -> void:
 			colors.append(Color(value))
 
 	var sprite_size: Vector2i = _array_to_vec2i(data.get("sprite_size", [16, 24]), Vector2i(16, 24))
+	_actor_size = sprite_size
 	var frames: SpriteFrames = SpriteFrames.new()
 	frames.add_animation("run")
 	frames.set_animation_loop("run", true)
@@ -123,6 +151,14 @@ func _build_actor(data: Dictionary) -> void:
 
 	_actor_sprite.sprite_frames = frames
 	_actor_sprite.play("run")
+
+	var control_data: Variant = data.get("control", {})
+	if typeof(control_data) == TYPE_DICTIONARY:
+		var control: Dictionary = control_data
+		_player_control_enabled = bool(control.get("enabled", false))
+		_player_move_speed = float(control.get("speed", 80.0))
+	_clamp_actor_position()
+	_actor_root.position = _actor_position
 
 
 func _clear_children(node: Node) -> void:
@@ -166,8 +202,10 @@ func get_actor_start_position() -> Vector2:
 
 func set_actor_start_position(value: Vector2) -> void:
 	_actor_start = value
+	_actor_position = value
+	_clamp_actor_position()
 	if _actor_root != null:
-		_actor_root.position = _actor_start
+		_actor_root.position = _actor_position
 
 
 func get_actor_velocity() -> Vector2:
@@ -205,3 +243,10 @@ func _create_solid_texture(size: Vector2i, color: Color) -> Texture2D:
 	var image := Image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
 	image.fill(color)
 	return ImageTexture.create_from_image(image)
+
+
+func _clamp_actor_position() -> void:
+	var max_x: float = maxf(0.0, float(_internal_resolution.x - _actor_size.x))
+	var max_y: float = maxf(0.0, float(_internal_resolution.y - _actor_size.y))
+	_actor_position.x = clampf(_actor_position.x, 0.0, max_x)
+	_actor_position.y = clampf(_actor_position.y, 0.0, max_y)
