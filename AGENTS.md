@@ -6,6 +6,7 @@ This repository contains planning docs plus an initial Godot 4 milestone scaffol
 - `scenes/`: app scene(s), currently `App.tscn`
 - `scripts/models/`: JSON models (`ProjectModel`, `SceneModel`)
 - `scripts/runtime/`: runtime systems (`PlaybackClock`, `TimelineController`, `SceneRuntime`)
+- `scripts/ui/`: editor UI panels (`ProjectPanel`, `TimelinePanel`, `SceneEditorPanel`, `InspectorPanel`)
 - `sample_project/`: minimal project + scene JSON used for validation
 - `8_bit_music_clip_maker_godot_app_plan.md`: product and architecture plan
 - `EXECUTION_PLAN.md`: milestone breakdown

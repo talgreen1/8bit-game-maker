@@ -4,6 +4,7 @@ extends RefCounted
 var scene_name := ""
 var background: Dictionary = {}
 var actors: Array[Dictionary] = []
+var camera: Dictionary = {"mode": "static"}
 var scene_dir := ""
 var last_error := ""
 
@@ -31,6 +32,7 @@ func load(path: String) -> bool:
 	actors = []
 	for actor in data.get("actors", []):
 		actors.append(actor)
+	camera = data.get("camera", {"mode": "static"})
 
 	scene_dir = path.get_base_dir()
 	return true
@@ -42,6 +44,7 @@ func save(path: String) -> bool:
 		"scene_name": scene_name,
 		"background": background,
 		"actors": actors,
+		"camera": camera,
 	}
 
 	var file := FileAccess.open(path, FileAccess.WRITE)

@@ -1,12 +1,13 @@
 class_name SceneRuntime
 extends Node2D
 
-var _internal_resolution := Vector2i(320, 180)
+var _internal_resolution: Vector2i = Vector2i(320, 180)
 var _background_root: Node2D
 var _actor_root: Node2D
 var _actor_sprite: AnimatedSprite2D
-var _actor_start := Vector2.ZERO
-var _actor_velocity := Vector2.ZERO
+var _actor_start: Vector2 = Vector2.ZERO
+var _actor_velocity: Vector2 = Vector2.ZERO
+var _background_fill: Polygon2D
 
 
 func _ready() -> void:
@@ -47,7 +48,7 @@ func update_time(local_time: float) -> void:
 
 
 func _build_background(model: SceneModel, data: Dictionary) -> void:
-	var kind := str(data.get("type", "static_color"))
+	var kind: String = str(data.get("type", "static_color"))
 	if kind == "parallax":
 		_build_parallax_background(model, data)
 		return
@@ -56,7 +57,7 @@ func _build_background(model: SceneModel, data: Dictionary) -> void:
 			return
 		return
 
-	var polygon := Polygon2D.new()
+	var polygon: Polygon2D = Polygon2D.new()
 	polygon.polygon = PackedVector2Array([
 		Vector2(0, 0),
 		Vector2(_internal_resolution.x, 0),
@@ -65,6 +66,7 @@ func _build_background(model: SceneModel, data: Dictionary) -> void:
 	])
 	polygon.color = Color(data.get("color", "#1f2a44"))
 	_background_root.add_child(polygon)
+	_background_fill = polygon
 
 
 func _build_parallax_background(model: SceneModel, data: Dictionary) -> void:
@@ -73,12 +75,12 @@ func _build_parallax_background(model: SceneModel, data: Dictionary) -> void:
 		_build_background(model, {"type": "static_color", "color": "#1f2a44"})
 		return
 
-	var layer_index := 0
+	var layer_index: int = 0
 	for layer in layers:
 		if typeof(layer) != TYPE_DICTIONARY:
 			continue
 		if not _build_image_background(model, layer, Vector2(layer_index * 2, 0)):
-			var polygon := Polygon2D.new()
+			var polygon: Polygon2D = Polygon2D.new()
 			polygon.polygon = PackedVector2Array([
 				Vector2(0, 0),
 				Vector2(_internal_resolution.x, 0),
@@ -102,7 +104,7 @@ func _build_actor(data: Dictionary) -> void:
 	_actor_root.add_child(_actor_sprite)
 
 	var anim_config: Dictionary = data.get("animation", {})
-	var anim_fps := 8.0
+	var anim_fps: float = 8.0
 	var colors: Array = [Color("#f7d35d"), Color("#f39c12"), Color("#f7e29a")]
 	anim_fps = float(anim_config.get("fps", 8.0))
 	var source_colors: Array = anim_config.get("colors", [])
@@ -111,8 +113,8 @@ func _build_actor(data: Dictionary) -> void:
 		for value in source_colors:
 			colors.append(Color(value))
 
-	var sprite_size := _array_to_vec2i(data.get("sprite_size", [16, 24]), Vector2i(16, 24))
-	var frames := SpriteFrames.new()
+	var sprite_size: Vector2i = _array_to_vec2i(data.get("sprite_size", [16, 24]), Vector2i(16, 24))
+	var frames: SpriteFrames = SpriteFrames.new()
 	frames.add_animation("run")
 	frames.set_animation_loop("run", true)
 	frames.set_animation_speed("run", anim_fps)
@@ -133,21 +135,21 @@ func _clear_children(node: Node) -> void:
 func _build_image_background(model: SceneModel, data: Dictionary, offset: Vector2 = Vector2.ZERO) -> bool:
 	if not data.has("image_path"):
 		return false
-	var image_path := str(data.get("image_path", ""))
+	var image_path: String = str(data.get("image_path", ""))
 	if image_path == "":
 		return false
-	var resolved := model.resolve_asset_path(image_path)
-	var texture := load(resolved) as Texture2D
+	var resolved: String = model.resolve_asset_path(image_path)
+	var texture: Texture2D = load(resolved) as Texture2D
 	if texture == null:
 		return false
 
-	var sprite := Sprite2D.new()
+	var sprite: Sprite2D = Sprite2D.new()
 	sprite.centered = false
 	sprite.position = offset
 	sprite.texture = texture
 	sprite.modulate.a = clamp(float(data.get("alpha", 1.0)), 0.0, 1.0)
 
-	var stretch := bool(data.get("stretch", true))
+	var stretch: bool = bool(data.get("stretch", true))
 	if stretch and texture.get_width() > 0 and texture.get_height() > 0:
 		sprite.scale = Vector2(
 			float(_internal_resolution.x) / float(texture.get_width()),
@@ -156,6 +158,29 @@ func _build_image_background(model: SceneModel, data: Dictionary, offset: Vector
 
 	_background_root.add_child(sprite)
 	return true
+
+
+func get_actor_start_position() -> Vector2:
+	return _actor_start
+
+
+func set_actor_start_position(value: Vector2) -> void:
+	_actor_start = value
+	if _actor_root != null:
+		_actor_root.position = _actor_start
+
+
+func get_actor_velocity() -> Vector2:
+	return _actor_velocity
+
+
+func set_actor_velocity(value: Vector2) -> void:
+	_actor_velocity = value
+
+
+func set_background_color(color_value: Color) -> void:
+	if _background_fill != null:
+		_background_fill.color = color_value
 
 
 func _array_to_vec2(value: Variant, fallback: Vector2) -> Vector2:
