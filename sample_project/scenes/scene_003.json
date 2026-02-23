@@ -1,0 +1,36 @@
+{
+  "scene_name": "Sunset Sprint",
+  "background": {
+    "type": "static_color",
+    "color": "#1d3557"
+  },
+  "actors": [
+    {
+      "id": "rival",
+      "start_pos": [
+        240,
+        136
+      ],
+      "velocity": [
+        -28,
+        0
+      ],
+      "sprite_size": [
+        16,
+        24
+      ],
+      "animation": {
+        "name": "run",
+        "fps": 7,
+        "colors": [
+          "#ff6b6b",
+          "#ff9f43",
+          "#ffe66d"
+        ]
+      }
+    }
+  ],
+  "camera": {
+    "mode": "static"
+  }
+}
