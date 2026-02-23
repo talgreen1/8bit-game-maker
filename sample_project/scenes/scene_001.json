@@ -1,0 +1,33 @@
+{
+  "scene_name": "Runner Demo",
+  "background": {
+    "type": "static_color",
+    "color": "#243b55"
+  },
+  "actors": [
+    {
+      "id": "runner",
+      "start_pos": [
+        36,
+        138
+      ],
+      "velocity": [
+        20,
+        0
+      ],
+      "sprite_size": [
+        16,
+        24
+      ],
+      "animation": {
+        "name": "run",
+        "fps": 8,
+        "colors": [
+          "#f0c13a",
+          "#ec9f19",
+          "#f6da7c"
+        ]
+      }
+    }
+  ]
+}

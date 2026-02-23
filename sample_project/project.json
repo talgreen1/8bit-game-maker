@@ -1,0 +1,21 @@
+{
+  "project_name": "Milestone 1 Demo",
+  "fps": 60,
+  "internal_resolution": [
+    320,
+    180
+  ],
+  "output_resolution": [
+    1920,
+    1080
+  ],
+  "audio_path": "",
+  "timeline": [
+    {
+      "scene_id": "scene_001",
+      "start": 0.0,
+      "duration": 120.0,
+      "transition_out": "cut"
+    }
+  ]
+}
