@@ -24,5 +24,5 @@ The app loads `res://sample_project/project.json` and provides:
 - `scripts/models/`: project/scene data models
 - `scripts/runtime/`: playback/timeline/runtime code
 - `scripts/ui/`: milestone 2 editor panels
-- `sample_project/`: minimal JSON sample project and scene
+- `sample_project/`: minimal JSON sample project with multiple scenes
 - `tools/smoke_test.ps1`: CLI smoke test script

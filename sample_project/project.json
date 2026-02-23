@@ -14,7 +14,19 @@
     {
       "scene_id": "scene_001",
       "start": 0.0,
-      "duration": 120.0,
+      "duration": 40.0,
+      "transition_out": "cut"
+    },
+    {
+      "scene_id": "scene_002",
+      "start": 40.0,
+      "duration": 40.0,
+      "transition_out": "cut"
+    },
+    {
+      "scene_id": "scene_003",
+      "start": 80.0,
+      "duration": 40.0,
       "transition_out": "cut"
     }
   ]

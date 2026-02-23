@@ -1,0 +1,36 @@
+{
+  "scene_name": "City Chase",
+  "background": {
+    "type": "static_color",
+    "color": "#3b1f4a"
+  },
+  "actors": [
+    {
+      "id": "skater",
+      "start_pos": [
+        20,
+        132
+      ],
+      "velocity": [
+        36,
+        0
+      ],
+      "sprite_size": [
+        14,
+        22
+      ],
+      "animation": {
+        "name": "run",
+        "fps": 10,
+        "colors": [
+          "#6ee7ff",
+          "#32b6ff",
+          "#b9f5ff"
+        ]
+      }
+    }
+  ],
+  "camera": {
+    "mode": "follow"
+  }
+}
