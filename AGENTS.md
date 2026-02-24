@@ -17,6 +17,7 @@ No test automation is defined yet.
 - Optional CLI run (if Godot CLI is installed): `godot4 --path .`
 - Optional headless smoke check: `godot4 --headless --path . --quit`
 - Repository smoke check script (PowerShell): `.\tools\smoke_test.ps1 -GodotExe "C:\temp\godot-4.6.1\Godot_v4.6.1-stable_win64_console.exe"`
+- Sprite-sheet prep script (PowerShell): `.\tools\prepare_sprite_sheet.ps1 -InputPath "<source.png>" -OutputPath "sample_project/assets/sprites/forest_hero_walk.png" -Frames 8 -FrameWidth 20 -FrameHeight 28`
 
 ## Coding Style & Naming Conventions
 Target runtime is Godot 4.x with GDScript.
