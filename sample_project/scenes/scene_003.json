@@ -12,7 +12,7 @@
         136
       ],
       "velocity": [
-        -28,
+        0,
         0
       ],
       "sprite_size": [
@@ -27,6 +27,10 @@
           "#ff9f43",
           "#ffe66d"
         ]
+      },
+      "control": {
+        "enabled": true,
+        "speed": 120
       }
     }
   ],

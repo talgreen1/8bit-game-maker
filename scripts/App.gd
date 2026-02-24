@@ -215,12 +215,16 @@ func _apply_default_scene_data(model: RefCounted, scene_id: String) -> void:
 	model.actors = [{
 		"id": "actor_1",
 		"start_pos": [32, 140],
-		"velocity": [24, 0],
+		"velocity": [0, 0],
 		"sprite_size": [16, 24],
 		"animation": {
 			"name": "run",
 			"fps": 8,
 			"colors": ["#f0c13a", "#ec9f19", "#f6da7c"],
+		},
+		"control": {
+			"enabled": true,
+			"speed": 120.0,
 		},
 	}]
 
